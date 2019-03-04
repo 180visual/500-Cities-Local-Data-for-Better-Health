@@ -23,7 +23,7 @@ unhealth.box <- function(a){
   
   par(mar=c(5.1,4.1,4.1,2.1))
   par(cex.axis=0.8,las=2)
-  boxplot(x)
+  boxplot(x,ylab='Age-adjusted prevalence(%)')
   title(paste('Boxplot of Age-adjusted prevalence for \n',a),line = 1)
 }
 
