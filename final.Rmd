@@ -1,0 +1,279 @@
+---
+title: "final"
+output: pdf_document
+---
+
+```{r}
+library(magrittr)
+library(dplyr)
+library(tidyverse)
+setwd("~/Documents/dartmouth/2nd semester/data visul/final project")
+data = read.csv('500_Cities__Local_Data_for_Better_Health__2018_release.csv')
+```
+
+
+```{r}
+data1 = data[-(1:56),]
+data.example = data[(1:56),]
+d.healthinsurance = data1[which(data1$MeasureId == 'ACCESS2'),]
+d.arthritis = data1[which(data1$MeasureId == 'ARTHRITIS'),]
+d.bingedrinking = data1[which(data1$MeasureId == 'BINGE'),]
+d.highbloodpressure = data1[which(data1$MeasureId == 'BPHIGH'),]
+d.takingBPMedication = data1[which(data1$MeasureId == 'BPMED'),]
+d.cancer = data1[which(data1$MeasureId == 'CANCER'),]
+d.currentasthma = data1[which(data1$MeasureId == 'CASTHMA'),]
+d.coronaryheartdiease = data1[which(data1$MeasureId == 'CHD'),]
+d.annualcheckup = data1[which(data1$MeasureId =='CHECKUP'),]
+d.cholesterolscreening = data1[which(data1$MeasureId == 'CHOLSCREEN'),]
+d.colorectalcancerscreening = data1[which(data1$MeasureId == 'COLON_SCREEN'),]
+d.COPD = data1[which(data1$MeasureId == 'COPD'),]
+d.papsmeartest = data1[which(data1$MeasureId == 'PAPTEST'),]
+d.corepreventiveservicesforoldermen = data1[which(data1$MeasureId == 'COREM'),]
+d.corepreventiveservicesforolderwomen = data1[which(data1$MeasureId == 'COREW'),]
+d.currentsmoking = data1[which(data1$MeasureId == 'CSMOKING'),]
+d.dentalvisit = data1[which(data1$MeasureId == 'DENTAL'),]
+d.diabetes = data1[which(data1$MeasureId == 'DIABETES'),]
+d.highcholesterol = data1[which(data1$MeasureId == 'HIGHCHOL'),]
+d.chronickidneydisease = data1[which(data1$MeasureId == 'KIDNEY'),]
+d.physicalinactivity = data1[which(data1$MeasureId == 'LPA'),]
+d.mammograph = data1[which(data1$MeasureId == 'MAMMOUSE'),]
+d.mentalhealth = data1[which(data1$MeasureId == 'MHLTH'),]
+d.obesity = data1[which(data1$MeasureId == 'OBESITY'),]
+d.papsmeartest = data1[which(data1$MeasureId == 'PAPTEST'),]
+d.physicalhealth = data1[which(data1$MeasureId == 'PHLTH'),]
+d.sleeplessthan7 = data1[which(data1$MeasureId == 'SLEEP'),]
+d.stroke = data1[which(data1$MeasureId == 'STROKE'),]
+d.teethloss = data1[which(data1$MeasureId == 'TEETHLOST'),]
+```
+
+
+
+Choose cancer data, obestiy data, high cholestererol, stroke, diabetes.
+```{r}
+# Histogram for cancer data
+# select the cities out of the data
+#split the data into age adjusted pre and crude prev
+a=c()
+d.rate=c()
+illness=c()
+#function for selecting the ageadjusted prevalence
+ageadjust <- function(d){
+  a=d[which(d$GeographicLevel == 'City'),]
+  return(a[which(a$DataValueTypeID == 'AgeAdjPrv'),])
+}
+#function for computing the mean values for each state
+mean.data.value <- function(d){
+  mean.data.value=mean(sum(d$Data_Value/100*d$PopulationCount)/sum(d$PopulationCount))
+  return(mean.data.value)
+}
+#plot function
+nationalillnessplot <- function(d,n1,a){
+  d.rate=c(mean.data.value(d[which(d$StateAbbr == 'AL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AK'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AZ'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AR'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CO'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'DE'),]),
+      mean.data.value(d[which(d$StateAbbr == 'DC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'FL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'GA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'HI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ID'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'KS'),]),
+      mean.data.value(d[which(d$StateAbbr == 'KY'),]),
+      mean.data.value(d[which(d$StateAbbr == 'LA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ME'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MD'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MS'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MO'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NE'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NV'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NH'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NJ'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NM'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NY'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ND'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OH'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OK'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OR'),]),
+      mean.data.value(d[which(d$StateAbbr == 'PA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'SC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'SD'),]),
+      mean.data.value(d[which(d$StateAbbr == 'TN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'TX'),]),
+      mean.data.value(d[which(d$StateAbbr == 'UT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'VT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'VA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WV'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WY'),]))*100
+   name.state = as.factor(c('AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NV','ND','OH','OK','OR','PA','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'))
+  illness = data.frame('state'=name.state,'rate'=d.rate)
+  plot(c(1:50), sort(illness$rate), type = 'n',xaxt='n',pch='.',ylim = c(0,n1),xlab = 'State Rank',ylab =  paste(a,'Age adjusted prevalence(%)'),main = paste(a,'Ageadjusted prevalence in 50 states'))
+  lines(c(1:50),sort(illness$rate),type = 'h')
+  axis(side = 1, labels=c(1:nrow(illness)), at=seq(from=1, to=nrow(illness),by=1),tck=0.1,cex=0.1)
+  text(c(1:50),sort(illness$rate)+1,as.character(illness$state[order(illness$rate)]),srt=90,adj = 0,cex = 0.4)
+}
+```
+
+plot the graph for determing the mean sorting from states to states
+```{r}
+nationalillnessplot(ageadjust(d.diabetes),20,'Diabetes')
+nationalillnessplot(ageadjust(d.obesity),50,'Obesity')
+nationalillnessplot(ageadjust(d.bingedrinking),30,'Bingedrinking')
+nationalillnessplot(ageadjust(d.currentsmoking),40,'Current Smoking')
+```
+
+```{r}
+rate_sorted=c()
+qquniformdist <- function(d,a){
+  d.rate=c(mean.data.value(d[which(d$StateAbbr == 'AL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AK'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AZ'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AR'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CO'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'DE'),]),
+      mean.data.value(d[which(d$StateAbbr == 'DC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'FL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'GA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'HI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ID'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'KS'),]),
+      mean.data.value(d[which(d$StateAbbr == 'KY'),]),
+      mean.data.value(d[which(d$StateAbbr == 'LA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ME'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MD'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MS'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MO'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NE'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NV'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NH'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NJ'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NM'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NY'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ND'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OH'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OK'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OR'),]),
+      mean.data.value(d[which(d$StateAbbr == 'PA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'SC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'SD'),]),
+      mean.data.value(d[which(d$StateAbbr == 'TN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'TX'),]),
+      mean.data.value(d[which(d$StateAbbr == 'UT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'VT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'VA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WV'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WY'),]))*100
+   name.state = as.factor(c('AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NV','ND','OH','OK','OR','PA','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'))
+  illness = data.frame('state'=name.state,'rate'=d.rate)
+  rate_sorted = illness$rate[order(illness$rate,decreasing = F)]
+  plot(1:50/50,rate_sorted,xlab = 'Theoretical quantile of the R(0,1) distribution',ylab = paste(a,'prevalence %'),main = 'q-q plot for uniform distribution')
+  lines(seq(0,1,length=100),seq(min(rate_sorted),max(rate_sorted),length=100),type = 'l',col = 'red',lty=2)
+
+}
+```
+plot the q-q plot for uniform distribution
+```{r}
+qquniformdist(ageadjust(d.cancer),'cancer')
+```
+
+```{r}
+rate_sorted=c()
+pthq = c()
+zl = c()
+lb = c()
+ub = c()
+lambda=NULL
+qqplot <- function(d){
+  d.rate=c(mean.data.value(d[which(d$StateAbbr == 'AL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AK'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AZ'),]),
+      mean.data.value(d[which(d$StateAbbr == 'AR'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CO'),]),
+      mean.data.value(d[which(d$StateAbbr == 'CT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'DE'),]),
+      mean.data.value(d[which(d$StateAbbr == 'DC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'FL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'GA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'HI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ID'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IL'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'IA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'KS'),]),
+      mean.data.value(d[which(d$StateAbbr == 'KY'),]),
+      mean.data.value(d[which(d$StateAbbr == 'LA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ME'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MD'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MS'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MO'),]),
+      mean.data.value(d[which(d$StateAbbr == 'MT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NE'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NV'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NH'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NJ'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NM'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NY'),]),
+      mean.data.value(d[which(d$StateAbbr == 'NC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'ND'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OH'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OK'),]),
+      mean.data.value(d[which(d$StateAbbr == 'OR'),]),
+      mean.data.value(d[which(d$StateAbbr == 'PA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'SC'),]),
+      mean.data.value(d[which(d$StateAbbr == 'SD'),]),
+      mean.data.value(d[which(d$StateAbbr == 'TN'),]),
+      mean.data.value(d[which(d$StateAbbr == 'TX'),]),
+      mean.data.value(d[which(d$StateAbbr == 'UT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'VT'),]),
+      mean.data.value(d[which(d$StateAbbr == 'VA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WA'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WV'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WI'),]),
+      mean.data.value(d[which(d$StateAbbr == 'WY'),]))*100
+   name.state = as.factor(c('AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NV','ND','OH','OK','OR','PA','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'))
+  illness = data.frame('state'=name.state,'rate'=d.rate)
+  lambda = 0.95
+  rate_sorted = illness$rate[order(illness$rate,decreasing = F)]
+  plot(qnorm((1:50-0.5)/50),sort(rate_sorted-mean(rate_sorted))/sd(rate_sorted),xlab = 'Theoretical quantile',ylab = 'Empirical quantile',main = 'q-q plot for normal distribution')
+  lines(seq(-2.5,2.5,length = 100),seq(-2.5,2.5,length = 100),col = 'black',lty = 2)
+  pthq = pnorm(seq(from = -8, to = 8, length = 1000))
+  zl = qnorm((1+lambda)/2)
+  lb = qnorm(pthq-zl*sqrt(pthq*(1-pthq)/nrow(d)))
+  ub = qnorm(pthq+zl*sqrt(pthq*(1-pthq)/nrow(d)))
+  lines(seq(from = -8, to = 8, length = 1000),lb,col = 'red',lwd=2)
+  lines(seq(from = -8, to = 8, length = 1000),ub,col = 'red',lwd = 2)
+}
+```
+```{r}
+qqplot(ageadjust(d.cancer))
+qqplot(ageadjust(d.obesity))
+```
