@@ -1,0 +1,35 @@
+---
+title: "180final"
+author: "Boran Lu"
+date: "March 3, 2019"
+output: pdf_document
+---
+
+```{r}
+data = read.csv('500_Cities__Local_Data_for_Better_Health__2018_release.csv')
+```
+
+```{r}
+unhealth.box <- function(a){
+  uh <- data[which(data$Measure==a & data$StateAbbr!='US'),]
+  uh.aap=uh[which(uh$DataValueTypeID=='AgeAdjPrv'),]
+  uh.aap$StateAbbr <- as.character(uh.aap$StateAbbr)
+  uh.aap=uh.aap[order(uh.aap$StateAbbr),]
+  x <- list()
+  for(i in unique(uh.aap$StateAbbr)){
+    city <- uh.aap[which(uh.aap$StateAbbr==i),]
+    x[[i]] <- city$Data_Value
+  }
+  
+  par(mar=c(5.1,4.1,4.1,2.1))
+  par(cex.axis=0.8,las=2)
+  boxplot(x)
+  title(paste('Boxplot of Age-adjusted prevalence for \n',a),line = 1)
+}
+
+
+unhealth.box('Binge drinking among adults aged >=18 Years')
+
+measure.list=as.character(unique(data$Measure))
+```
+
